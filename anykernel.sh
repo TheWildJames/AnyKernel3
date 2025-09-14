@@ -14,7 +14,7 @@ device.name1=cheetah
 device.name2=panther
 device.name3=lynx
 supported.versions=16
-supported.patchlevels=
+supported.patchlevels=2025-09 - 2025-11
 '; } # end properties
 
 # boot image installation
