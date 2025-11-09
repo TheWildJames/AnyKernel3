@@ -4,7 +4,7 @@
 ### AnyKernel setup
 # global properties
 properties() { '
-kernel.string=Wild Kernels by TheWildJames aka Morgan Weedman
+kernel.string=VulcanX (Redmi Note 12R)
 do.devicecheck=0
 do.modules=1
 do.systemless=0
