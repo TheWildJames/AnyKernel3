@@ -978,10 +978,31 @@ extract_kernel_version() {
 }
 
 # Version comparison: returns 0 if a >= b, 1 if a < b
+Bash
+
+
 version_ge() {
-  if [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n1)" = "$2" ]; then
+  local new=$1 dev=$2
+  local n1 n2 n3 d1 d2 d3
+  
+  # Fast-track for exact matches (5.15.180 == 5.15.180)
+  [ "$new" = "$dev" ] && return 0
+
+  # Split into segments
+  n1=$(echo "$new" | cut -d. -f1); n2=$(echo "$new" | cut -d. -f2); n3=$(echo "$new" | cut -d. -f3)
+  d1=$(echo "$dev" | cut -d. -f1); d2=$(echo "$dev" | cut -d. -f2); d3=$(echo "$dev" | cut -d. -f3)
+
+  # Check Major & Minor equality
+  if [ "$n1" != "$d1" ] || [ "$n2" != "$d2" ]; then
+    ui_print "  -> ERROR: Base version mismatch ($n1.$n2 vs $d1.$d2)"
+    return 1
+  fi
+
+  # Check Patch version (e.g., .185 >= .180)
+  if [ "$n3" -ge "$d3" ] 2>/dev/null; then
     return 0
   else
+    ui_print "  -> ERROR: Downgrade detected ($n3 < $d3)"
     return 1
   fi
 }
